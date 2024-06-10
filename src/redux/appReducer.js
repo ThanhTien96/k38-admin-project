@@ -2,18 +2,21 @@
 
 const initialState = {
     appTitle: "",
-    pageLoading: false,
+    appLoading: false,
 };
 
-export const appReducerContants = {
-    UPDATE_APP_TITLE: "UPDATE_APP_TITLE",
+export const APP_REDUCER_TYPE = {
+    updateAppTitle: "UPDATE_APP_TITLE",
+    updateAppLoading: "UPDATE_APP_LOADING"
 }
 
 const appReducer = (state = initialState, action) => {
     switch (action.type){
-        case appReducerContants.UPDATE_APP_TITLE:
+        case APP_REDUCER_TYPE.updateAppTitle:
             const newState = {...state, appTitle: action.payload}
             return newState
+        case APP_REDUCER_TYPE.updateAppLoading:
+            return {...state, appLoading: action.payload}
         default:
             return state;
     }

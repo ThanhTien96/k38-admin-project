@@ -1,22 +1,35 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { appReducerContants } from "./redux/appReducer";
+import { thunkFetchListShoe, thunkFetchShoeDetail } from "./redux/action";
+import {  Spin, message } from "antd";
+
 
 function App() {
-  const { appTitle, pageLoading } = useSelector((state) => state.appReducer);
+  const { appTitle, appLoading } = useSelector((state) => state.appReducer);
+  const {listShoe, error} = useSelector((state) => state.productReducer);
 
-  console.log("☣️👻👻 >>> App >>> appTitle: ", appTitle)
+  const [messageApi, contextHolder] = message.useMessage()
+
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({type: appReducerContants.UPDATE_APP_TITLE, payload: "Admin - Template"})
+    dispatch(thunkFetchListShoe());
+    dispatch(thunkFetchShoeDetail())
   }, []);
+
+  useEffect(() => {
+    if(error) {
+      messageApi.error(error.message);
+    }
+  },[error, messageApi])
 
 
   return (
-    <div className="App">
+    <Spin spinning={appLoading} className="App" style={{height: "100vh"}}>
+      {contextHolder}
       <h1>Admin template</h1>
-    </div>
+    </Spin>
   );
 }
 
