@@ -1,35 +1,24 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { thunkFetchListShoe, thunkFetchShoeDetail } from "./redux/action";
-import {  Spin, message } from "antd";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainTemplate from "./templates/MainTemplate";
+import HomePage from "./pages/HomePage";
+import UserPage from "./pages/UserPage";
+import { PAGE_PATH } from "./constants/pagePath";
+import LoginPage from "./pages/LoginPage";
+import Singup from "./pages/Singup";
 
 function App() {
-  const { appTitle, appLoading } = useSelector((state) => state.appReducer);
-  const {listShoe, error} = useSelector((state) => state.productReducer);
-
-  const [messageApi, contextHolder] = message.useMessage()
-
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(thunkFetchListShoe());
-    dispatch(thunkFetchShoeDetail())
-  }, []);
-
-  useEffect(() => {
-    if(error) {
-      messageApi.error(error.message);
-    }
-  },[error, messageApi])
-
-
   return (
-    <Spin spinning={appLoading} className="App" style={{height: "100vh"}}>
-      {contextHolder}
-      <h1>Admin template</h1>
-    </Spin>
+    <BrowserRouter>
+      <Routes>
+        <Route path="" element={<MainTemplate />}>
+          <Route index path={PAGE_PATH.home} element={<HomePage />} />
+          <Route path={PAGE_PATH.user} element={<UserPage />} />
+        </Route>
+
+        <Route path={PAGE_PATH.login} element={<LoginPage />} />
+        <Route path={PAGE_PATH.singup} element={<Singup />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
