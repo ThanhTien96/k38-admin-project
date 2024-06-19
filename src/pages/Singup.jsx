@@ -1,10 +1,19 @@
 import { useFormik } from "formik";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UploadImage from "../components/UploadImage";
 import * as yup from "yup";
+import useHelmet from "../hooks/useHelmet";
+import UserRequester from "../service/userRequester";
+import { useDispatch } from "react-redux";
+import { MESSAGE_STATUS, setAlertMessage } from "../store/app/alertSlice";
+import { setIsAuth } from "../store/app/authSlice";
 
 const Singup = () => {
+  const dispatch = useDispatch();
+  const naviage = useNavigate();
+
+  useHelmet("App - Singup");
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -13,17 +22,42 @@ const Singup = () => {
       full_name: "",
       date_of_birth: "",
       avatar: "",
+      role: "user",
     },
     validationSchema: yup.object({
       username: yup.string().required("user name is require!"),
       password: yup.string().required("password is require!"),
-      email: yup.string().email('Invalid email address').required("email is require!"),
+      email: yup
+        .string()
+        .email("Invalid email address")
+        .required("email is require!"),
       full_name: yup.string().required("full name is require!"),
       date_of_birth: yup.string().required("date of birth is require!"),
       avatar: yup.string().required("avatar is require!"),
     }),
-    onSubmit: (value) => {
-      console.log("☣️👻👻 >>> Singup >>> value: ", value);
+    onSubmit: async (value) => {
+      try {
+        const res = await UserRequester.singup(value);
+
+        if (res.status === 201) {
+          dispatch(
+            setAlertMessage({
+              message: "register successfully.",
+              status: MESSAGE_STATUS.succes,
+            })
+          );
+          dispatch(setIsAuth(res.data));
+          naviage("/");
+        }
+      } catch (err) {
+        dispatch(
+          setAlertMessage({
+            message: err.response.data,
+            status: MESSAGE_STATUS.error,
+          })
+        );
+        console.log(err);
+      }
     },
   });
 

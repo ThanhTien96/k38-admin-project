@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import useHelmet from "../hooks/useHelmet";
 
 const HomePage = () => {
-  return (
-    <div>HomePage</div>
-  )
-}
+  useHelmet("App - Home");
 
-export default HomePage
+  return (
+    <div>
+      HomePage
+    </div>
+  );
+};
+
+export default HomePage;
