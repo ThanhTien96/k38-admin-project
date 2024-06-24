@@ -9,10 +9,34 @@ class UserRequester {
         })
     };
 
-    static async listUser() {
+    static async listUser(signal) {
         return await axiosRequester({
             url: "/user",
-            method: "GET"
+            method: "GET",
+            signal
+        })
+    }
+
+    static async deleteUser(id) {
+        return await axiosRequester({
+            url: "/user/" + id,
+            method: "DELETE",
+        })
+    };
+
+    static async userDetail(id, signal) {
+        return await axiosRequester({
+            url: `/user/${id}`,
+            method: "GET",
+            signal
+        })
+    };
+
+    static async updateUser(id, payload) {
+        return await axiosRequester({
+            url: `/user/${id}`, 
+            method: "PUT",
+            data: payload,
         })
     }
 }

@@ -7,7 +7,7 @@ import {
   GithubOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "antd/es/layout/layout";
 import { PAGE_PATH } from "../constants/pagePath";
 
@@ -16,6 +16,7 @@ const { Header, Sider, Content } = Layout;
 const MainTemplate = () => {
   const [collapsed, setCollapsed] = useState(false);
   const naviage = useNavigate();
+  const location = useLocation();
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -32,16 +33,18 @@ const MainTemplate = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["2"]}
+          defaultSelectedKeys={
+            [location.pathname ? location.pathname : PAGE_PATH.home]
+          }
           items={[
             {
-              key: "1",
+              key: PAGE_PATH.home,
               icon: <WindowsOutlined />,
               label: "Home",
               onClick: () => {naviage(PAGE_PATH.home)},
             },
             {
-              key: "2",
+              key: PAGE_PATH.user,
               icon: <UserOutlined />,
               label: "User",
               onClick: () => {naviage(PAGE_PATH.user)},

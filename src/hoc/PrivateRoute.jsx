@@ -10,14 +10,18 @@ const PrivateRoute = ({ component: Component, isAuth, isAdmin }) => {
     return <Navigate to={"/login"} />;
   }
 
-  if (isAuth) {
+  if (!isAdmin && isAuth) {
     return <Component />;
   }
 
   if (isAdmin && profile.role === "admin") {
     return <Component />;
   } else {
-    return <Navigate to={"/login"} />;
+    if(profile && auth === AUTH_STATE.auth) {
+      return <Navigate to={"/"} />;
+    } else {
+      return <Navigate to={"/login"} />;
+    }
   }
 };
 
